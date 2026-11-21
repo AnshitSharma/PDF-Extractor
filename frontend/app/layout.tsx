@@ -15,7 +15,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
             <span className="navbar-brand">PDF Extractor</span>
           </div>
         </nav>
-        <main className="container">{children}</main>
+        <main className="container pb-5">{children}</main>
       </body>
     </html>
   );

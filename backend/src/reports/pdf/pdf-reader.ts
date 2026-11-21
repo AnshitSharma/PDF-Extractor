@@ -27,6 +27,7 @@ const ocrLanguageData = `${dirname(fileURLToPath(import.meta.resolve('@tesseract
 
 // scanned pages are rendered at about 300 DPI before OCR
 const OCR_SCALE = 4;
+const MAX_IMAGE_SIDE = 4000;
 
 // Returns the text of every page. Positions are fractions of the page size
 // (0 to 1) so the parser doesn't care how big the page is.
@@ -83,7 +84,10 @@ async function readTextLayer(page: PDFPageProxy): Promise<TextItem[]> {
 }
 
 async function renderPage(page: PDFPageProxy) {
-  const viewport = page.getViewport({ scale: OCR_SCALE });
+  // a PDF can declare a huge page, so the image size is capped
+  const { width, height } = page.getViewport({ scale: 1 });
+  const scale = Math.min(OCR_SCALE, MAX_IMAGE_SIDE / Math.max(width, height));
+  const viewport = page.getViewport({ scale });
   const canvas = createCanvas(viewport.width, viewport.height);
   // pdf.js is typed for the browser canvas, the Node one works the same way
   await page.render({
