@@ -1,0 +1,7 @@
+node_modules/
+dist/
+.next/
+.env
+*.traineddata
+Technical_Assignment_Full_Stack.pdf
+*.tsbuildinfo
