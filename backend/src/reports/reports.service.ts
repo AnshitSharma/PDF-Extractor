@@ -8,7 +8,13 @@ import {
 import { InjectRepository } from '@nestjs/typeorm';
 import { QueryFailedError, Repository } from 'typeorm';
 import { Report } from './entities/report.entity.js';
-import { readPdfPages, type TextItem } from './pdf/pdf-reader.js';
+import {
+  MAX_PAGES,
+  OcrError,
+  readPdfPages,
+  TooManyPagesError,
+  type TextItem,
+} from './pdf/pdf-reader.js';
 import { parseReport } from './pdf/report-parser.js';
 
 const UNIQUE_VIOLATION = '23505';
@@ -39,7 +45,14 @@ export class ReportsService {
     let pages: TextItem[][];
     try {
       pages = await readPdfPages(file.buffer);
-    } catch {
+    } catch (error) {
+      if (error instanceof TooManyPagesError) {
+        throw new BadRequestException(
+          `PDFs can have at most ${MAX_PAGES} pages`,
+        );
+      }
+      // OCR failing is a problem on our side, not a bad file
+      if (error instanceof OcrError) throw error;
       throw new BadRequestException(
         'This PDF is damaged and could not be read',
       );
