@@ -4,7 +4,7 @@ Upload a lab report PDF, and the app pulls out the test results table, saves it 
 
 Built for Problem 1 (PDF Report Data Extraction) of the full stack assignment, with NestJS, PostgreSQL and Next.js.
 
-**Demo video:** _link to be added_
+**Demo video:** https://drive.google.com/file/d/195apFwPpiKqTQ5c0Vk8K764SkTM28adp/view?usp=sharing
 
 ## What I built
 
